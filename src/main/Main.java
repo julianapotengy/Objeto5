@@ -72,10 +72,20 @@ public class Main extends JFrame implements ActionListener {
 				if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
 						&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
 				{
-					particleA.ChangeColor();
-					particleA.ChangeDirection();
-					particleB.ChangeColor();
-					particleB.ChangeDirection();
+					if (particleA.velocityX != particleB.velocityX) 
+					{
+						particleA.ChangeColor();
+						particleA.ChangeDirectionX();
+						particleB.ChangeColor();
+						particleB.ChangeDirectionX();
+					}
+					if (particleA.velocityY != particleB.velocityY) 
+					{
+						particleA.ChangeColor();
+						particleA.ChangeDirectionY();
+						particleB.ChangeColor();
+						particleB.ChangeDirectionY();
+					}
 				}
 			}
 		}

@@ -61,15 +61,22 @@ public class Particle extends Canvas {
 	
 	public void CheckCollisionWalls()
 	{
-		if(x >= canvasSizeX || x <= 0 || y <= 0 || y >= canvasSizeY)
+		if(x >= canvasSizeX || x <= 0)
 		{
-			ChangeDirection();
+			ChangeDirectionX();
+		}
+		if(y <= 0 || y >= canvasSizeY)
+		{
+			ChangeDirectionY();
 		}
 	}
 	
-	public void ChangeDirection()
+	public void ChangeDirectionX()
 	{
 		velocityX *= -1;
+	}
+	public void ChangeDirectionY()
+	{
 		velocityY *= -1;
 	}
 }
