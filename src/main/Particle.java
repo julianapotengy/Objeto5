@@ -8,107 +8,68 @@ import javax.swing.*;
 
 public class Particle extends Canvas {
 	
-	int id, x, y, width, height, canvasSize, direction;
-	float velocity = 1;
+	int id, x, y, width, height, canvasSizeX, canvasSizeY;
+	float velocityX, velocityY;
+	boolean colorBlack = true;
 	
-	public Particle(int id, int x, int y, int width, int height, int canvasSize)
+	public Particle(int id, int x, int y, int width, int height, int canvasSizeX, int canvasSizeY)
 	{
 		this.id = id;
 		this.x = x;
 		this.y = y;
 		this.width = width;
 		this.height = height;
-		this.canvasSize = canvasSize;
+		this.canvasSizeX = canvasSizeX;
+		this.canvasSizeY = canvasSizeY;
 		
-		ChangeDirection();
+		Random rand = new Random();
+		while (velocityX == 0 && velocityY == 0)
+		{
+			velocityX = rand.nextInt(3) - 1;
+			velocityY = rand.nextInt(3) - 1;
+		}
 	}
 	
 	public void Paint(Graphics g)
 	{
+		g.setColor(GetColor());
 		g.fillOval(x, y, width, height);
 	}
 	
 	public void Move() 
 	{
-		CheckDirection();
+		x += velocityX;
+		y += velocityY;
 		CheckCollisionWalls();
+	}
+	
+	public Color GetColor()
+	{
+		if(colorBlack)
+		{
+			return Color.black;
+		}
+		else return Color.blue;
+	}
+	
+	public void ChangeColor()
+	{
+		if(colorBlack != true)
+			colorBlack = true;
+		else colorBlack = false;
 	}
 	
 	public void CheckCollisionWalls()
 	{
-		if(x >= (canvasSize - (width * 2))) // direita
+		if(x >= canvasSizeX || x <= 0 || y <= 0 || y >= canvasSizeY)
 		{
-			while(direction == 0 || direction == 2 || direction == 3 || direction == 4  || direction == 5)
-			{
-				ChangeDirection();
-			}
-		}
-		else if(x <= 0) // esquerda
-		{
-			while(direction == 1 || direction == 2 || direction == 3 || direction >= 6)
-			{
-				ChangeDirection();
-			}
-		}
-		else if(y <= 0) // cima
-		{
-			while(direction <= 2 || direction == 4 || direction == 6)
-			{
-				ChangeDirection();
-			}
-		}
-		else if(y >= (canvasSize - (height * 3.5f))) // baixo
-		{
-			while(direction <= 1 || direction == 3 || direction == 5 || direction == 7)
-			{
-				ChangeDirection();
-			}
+			ChangeDirection();
 		}
 	}
 	
 	public void ChangeDirection()
 	{
-		Random rand = new Random();
-		direction = rand.nextInt(8);
-	}
-	
-	public void CheckDirection()
-	{
-		if(direction == 0) // direita
-		{
-			x += velocity;
-		}
-		else if(direction == 1) // esquerda
-		{
-			x -= velocity;
-		}
-		else if(direction == 2) // cima
-		{
-			y -= velocity;
-		}
-		else if(direction == 3) // baixo
-		{
-			y += velocity;
-		}
-		else if(direction == 4) // diagonal direita cima
-		{
-			x += velocity;
-			y -= velocity;
-		}
-		else if(direction == 5) // diagonal direita baixo
-		{
-			x += velocity;
-			y += velocity;
-		}
-		else if(direction == 6) // diagonal esquerda cima
-		{
-			x -= velocity;
-			y -= velocity;
-		}
-		else if(direction == 7) // diagonal esquerda baixo
-		{
-			x -= velocity;
-			y += velocity;
-		}
+		velocityX *= -1;
+		velocityY *= -1;
 	}
 }

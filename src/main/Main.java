@@ -12,10 +12,12 @@ public class Main extends JFrame implements ActionListener {
 
 	private MyCanvas canvas = new MyCanvas();
 	private int canvasSize = 700;
+	private int canvasSizeX = canvasSize - 25;
+	private int canvasSizeY = canvasSize - 45;
 	
-	private int maxParticles = 10;
+	private int maxParticles = 300;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
-	private int particleSize = 15;
+	private int particleSize = 10;
 	
 	Random generator = new Random();
 	
@@ -29,10 +31,10 @@ public class Main extends JFrame implements ActionListener {
 		
 		for(int i = 0; i < maxParticles; i++)
 		{
-			int x = generator.nextInt(canvasSize - (particleSize * 2));
-			int y = generator.nextInt(canvasSize - (particleSize * 2));
+			int x = generator.nextInt(canvasSizeX);
+			int y = generator.nextInt(canvasSizeY);
 			
-			allParticles.add(new Particle(i, x, y, particleSize, particleSize, canvasSize));
+			allParticles.add(new Particle(i, x, y, particleSize, particleSize, canvasSizeX, canvasSizeY));
 		}
 		
 		setLayout (new BorderLayout ());
@@ -53,8 +55,30 @@ public class Main extends JFrame implements ActionListener {
 		for(int i = 0; i < maxParticles; i++)
 		{
 			allParticles.get(i).Move();
+			CheckParticlesCollision(i);
 		}
 		canvas.repaint();
+	}
+	
+	private void CheckParticlesCollision(int id1)
+	{
+		Particle particleA = allParticles.get(id1);
+		
+		for(int i = 0; i < maxParticles; i++)
+		{
+			if(id1 != i)
+			{
+				Particle particleB = allParticles.get(i);
+				if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
+						&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
+				{
+					particleA.ChangeColor();
+					particleA.ChangeDirection();
+					particleB.ChangeColor();
+					particleB.ChangeDirection();
+				}
+			}
+		}
 	}
 	
 	private class MyCanvas extends Canvas {
