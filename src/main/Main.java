@@ -15,9 +15,9 @@ public class Main extends JFrame implements ActionListener {
 	private int canvasSizeX = canvasSize - 24;
 	private int canvasSizeY = canvasSize - 44;
 	
-	private int maxParticles = 100;
+	private int maxParticles = 10000;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
-	private int particleSize = 10;
+	private int particleSize = 5;
 	
 	Random generator = new Random();
 	
@@ -83,6 +83,8 @@ public class Main extends JFrame implements ActionListener {
 	
 	private void CheckParticlesCollision()
 	{
+		long startTime = System.currentTimeMillis();
+		
 		for(int i = 0; i < maxParticles; i++)
 		{
 			Particle particleA = allParticles.get(i);
@@ -109,6 +111,9 @@ public class Main extends JFrame implements ActionListener {
 				}
 			}
 		}
+		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		System.out.println(elapsedTime);
 	}
 	
 	private class MyCanvas extends Canvas {
@@ -120,7 +125,10 @@ public class Main extends JFrame implements ActionListener {
 			{
 				allParticles.get(i).Paint(g);
 			}
-			initialQuadtree.Paint(g);
+			if (quadtree) 
+			{
+				initialQuadtree.Paint(g);
+			}
 		}
 	}
 }

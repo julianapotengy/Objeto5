@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Quadtree {
 	
-	int maxQnt = 4;
+	int maxQnt = 10;
 	Square square;
 	ArrayList<Square> squares = new ArrayList<Square>();
 	ArrayList<Quadtree> quadtrees = new ArrayList<Quadtree>();
@@ -57,6 +57,7 @@ public class Quadtree {
 		if(particles.size() <= maxQnt)
 		{
 			actualParticles = particles;
+			CheckParticlesCollision();
 		}
 		else
 		{
@@ -98,6 +99,41 @@ public class Quadtree {
 				Insert(allParticles);
 			}
 		}
+	}
+	
+	public void CheckParticlesCollision() 
+	{
+		long startTime = System.currentTimeMillis();
+		
+		for(int i = 0; i < actualParticles.size(); i++)
+		{
+			Particle particleA = actualParticles.get(i);
+			
+			for(int j = i + 1; j < actualParticles.size(); j++)
+			{
+				Particle particleB = actualParticles.get(j);
+				if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
+						&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
+				{
+					particleA.ChangeColor();
+					particleB.ChangeColor();
+					
+					if (particleA.velocityX != particleB.velocityX) 
+					{
+						particleA.ChangeDirectionX();
+						particleB.ChangeDirectionX();
+					}
+					if (particleA.velocityY != particleB.velocityY) 
+					{
+						particleA.ChangeDirectionY();
+						particleB.ChangeDirectionY();
+					}
+				}
+			}
+		}
+		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		System.out.println(elapsedTime);
 	}
 	
 	public void Paint(Graphics g)
