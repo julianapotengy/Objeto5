@@ -23,6 +23,9 @@ public class Main extends JFrame implements ActionListener {
 	
 	Timer timer = new Timer(100, this);
 	
+	Square initialSquare = new Square(0, 0, canvasSizeX, canvasSizeY);
+	Quadtree initialQuadtree = new Quadtree(initialSquare);
+	
 	public static void main(String[] args) {
 		Main m = new Main();
 	}
@@ -31,8 +34,8 @@ public class Main extends JFrame implements ActionListener {
 		
 		for(int i = 0; i < maxParticles; i++)
 		{
-			int x = generator.nextInt(canvasSizeX);
-			int y = generator.nextInt(canvasSizeY);
+			int x = generator.nextInt(canvasSizeX - particleSize);
+			int y = generator.nextInt(canvasSizeY - particleSize);
 			
 			allParticles.add(new Particle(i, x, y, particleSize, particleSize, canvasSizeX, canvasSizeY));
 		}
@@ -48,6 +51,8 @@ public class Main extends JFrame implements ActionListener {
 		setVisible(true);
 		
 		timer.start();
+		
+		initialQuadtree.Insert(allParticles);
 	}
 	
 	@Override
@@ -57,12 +62,12 @@ public class Main extends JFrame implements ActionListener {
 			allParticles.get(i).Move();
 		}
 		CheckParticlesCollision();
+		
 		canvas.repaint();
 	}
 	
 	private void CheckParticlesCollision()
 	{
-		
 		for(int i = 0; i < maxParticles; i++)
 		{
 			Particle particleA = allParticles.get(i);
@@ -100,6 +105,7 @@ public class Main extends JFrame implements ActionListener {
 			{
 				allParticles.get(i).Paint(g);
 			}
+			initialQuadtree.Paint(g);
 		}
 	}
 }
