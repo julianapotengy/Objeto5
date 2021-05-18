@@ -10,6 +10,8 @@ public class Quadtree {
 	ArrayList<Square> squares = new ArrayList<Square>();
 	ArrayList<Quadtree> quadtrees = new ArrayList<Quadtree>();
 	ArrayList<Particle> actualParticles = new ArrayList<Particle>();
+	ArrayList<Particle> allParticles = new ArrayList<Particle>();
+	ArrayList<Particle> tempParticles = new ArrayList<Particle>();
 	
 	boolean isDivided = false;
 	
@@ -18,17 +20,17 @@ public class Quadtree {
 		this.square = square;
 	}
 	
-	public void Divide(ArrayList<Particle> particles)
+	public void Divide()
 	{
 		int x = square.x;
 		int y = square.y;
 		int width = square.width;
 		int height = square.height;
 		
-		squares.add(new Square(Math.round(x), Math.round(y), Math.round(width / 2), Math.round(height / 2)));
-		squares.add(new Square(Math.round(x + width / 2), Math.round(y), Math.round(width / 2), Math.round(height / 2)));
-		squares.add(new Square(Math.round(x), Math.round(y + height / 2), Math.round(width / 2), Math.round(height / 2)));
-		squares.add(new Square(Math.round(x + width / 2), Math.round(y + height / 2), Math.round(width / 2), Math.round(height / 2)));
+		squares.add(new Square(x, y, width / 2, height / 2));
+		squares.add(new Square(x + width / 2, y, width / 2, height / 2));
+		squares.add(new Square(x, y + height / 2, width / 2, height / 2));
+		squares.add(new Square(x + width / 2, y + height / 2, width / 2, height / 2));
 		
 		for(int i = 0; i < squares.size(); i++)
 		{
@@ -37,11 +39,11 @@ public class Quadtree {
 		
 		for(int i = 0; i < quadtrees.size(); i++)
 		{
-			for(int j = 0; j < particles.size(); j++)
+			for(int j = 0; j < allParticles.size(); j++)
 			{
-				if(quadtrees.get(i).square.ContainsParticle(particles.get(j)))
+				if(quadtrees.get(i).square.ContainsParticle(allParticles.get(j)))
 				{
-					squares.get(i).particles.add(particles.get(j));
+					squares.get(i).particles.add(allParticles.get(j));
 				}
 			}
 			quadtrees.get(i).Insert(quadtrees.get(i).square.particles);
@@ -60,7 +62,40 @@ public class Quadtree {
 		{
 			if(!isDivided)
 			{
-				Divide(particles);
+				allParticles = particles;
+				Divide();
+			}
+		}
+	}
+	
+	public void Change() 
+	{
+		squares = new ArrayList <Square>();
+		quadtrees = new ArrayList<Quadtree>();
+		actualParticles = new ArrayList<Particle>();
+		tempParticles = new ArrayList<Particle>();
+	}
+	
+	public void CheckQntInTimer() 
+	{
+		if (isDivided) 
+		{
+			for(int i = 0; i < quadtrees.size(); i++)
+			{
+				quadtrees.get(i).CheckQntInTimer();
+			}
+			for(int i = 0; i < allParticles.size(); i++)
+			{
+				if(square.ContainsParticle(allParticles.get(i)))
+				{
+					tempParticles.add(allParticles.get(i));
+				}
+			}
+			if (tempParticles != actualParticles) 
+			{
+				Change();
+				isDivided = false;
+				Insert(allParticles);
 			}
 		}
 	}

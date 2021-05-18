@@ -11,6 +11,7 @@ public class Particle extends Canvas {
 	int id, x, y, width, height, canvasSizeX, canvasSizeY;
 	float velocityX, velocityY;
 	boolean colorBlack = true;
+	int timerChangeColor = 0;
 	
 	public Particle(int id, int x, int y, int width, int height, int canvasSizeX, int canvasSizeY)
 	{
@@ -32,8 +33,10 @@ public class Particle extends Canvas {
 	
 	public void Paint(Graphics g)
 	{
-		g.setColor(GetColor());
-		g.fillOval(x, y, width, height);
+		Graphics g2D = (Graphics2D) g;
+		
+		g2D.setColor(GetColor());
+		g2D.fillOval(x, y, width, height);
 	}
 	
 	public void Move() 

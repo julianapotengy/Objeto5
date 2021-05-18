@@ -12,8 +12,8 @@ public class Main extends JFrame implements ActionListener {
 
 	private MyCanvas canvas = new MyCanvas();
 	private int canvasSize = 700;
-	private int canvasSizeX = canvasSize - 25;
-	private int canvasSizeY = canvasSize - 45;
+	private int canvasSizeX = canvasSize - 24;
+	private int canvasSizeY = canvasSize - 44;
 	
 	private int maxParticles = 50;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
@@ -25,6 +25,8 @@ public class Main extends JFrame implements ActionListener {
 	
 	Square initialSquare = new Square(0, 0, canvasSizeX, canvasSizeY);
 	Quadtree initialQuadtree = new Quadtree(initialSquare);
+	
+	boolean quadtree = true;
 	
 	public static void main(String[] args) {
 		Main m = new Main();
@@ -42,12 +44,10 @@ public class Main extends JFrame implements ActionListener {
 		
 		setLayout (new BorderLayout ());
 		setSize(canvasSize, canvasSize);
-		setTitle("Canvas demo");
+		setTitle("Álan, Fernanda e Juliana");
 		add("Center", canvas);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setLocationRelativeTo(null);
-		
 		setVisible(true);
 		
 		timer.start();
@@ -61,8 +61,14 @@ public class Main extends JFrame implements ActionListener {
 		{
 			allParticles.get(i).Move();
 		}
-		CheckParticlesCollision();
-		
+		if (quadtree) 
+		{
+			initialQuadtree.CheckQntInTimer();
+		}else 
+		{
+			CheckParticlesCollision();
+		}
+
 		canvas.repaint();
 	}
 	

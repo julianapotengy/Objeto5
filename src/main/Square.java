@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 
 public class Square {
@@ -19,8 +20,10 @@ public class Square {
 	
 	public void Paint(Graphics g)
 	{
-		g.setColor(Color.black);
-		g.drawRect(x, y, width, height);
+		Graphics g2D = (Graphics2D) g;
+		
+		g2D.setColor(Color.black);
+		g2D.drawRect(x, y, width, height);
 	}
 	
 	public boolean ContainsParticle(Particle particle)
