@@ -20,7 +20,7 @@ public class Square {
 	
 	public void Paint(Graphics g)
 	{
-		Graphics g2D = (Graphics2D) g;
+		Graphics2D g2D = (Graphics2D) g;
 		
 		g2D.setColor(Color.black);
 		g2D.drawRect(x, y, width, height);

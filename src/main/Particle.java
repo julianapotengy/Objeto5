@@ -33,7 +33,7 @@ public class Particle extends Canvas {
 	
 	public void Paint(Graphics g)
 	{
-		Graphics g2D = (Graphics2D) g;
+		Graphics2D g2D = (Graphics2D) g;
 		
 		g2D.setColor(GetColor());
 		g2D.fillOval(x, y, width, height);
@@ -60,9 +60,10 @@ public class Particle extends Canvas {
 		if(!collided) 
 		{
 			collided = true;
-		}else 
+		}
+		else 
 		{
-			if (timerChangeColor > 0) 
+			if(timerChangeColor > 0) 
 			{
 				timerChangeColor = 0;
 				collided = false;
@@ -72,11 +73,11 @@ public class Particle extends Canvas {
 	
 	public void CheckCollisionWalls()
 	{
-		if(x >= canvasSizeX || x <= 0)
+		if(x + width >= canvasSizeX || x <= 0)
 		{
 			ChangeDirectionX();
 		}
-		if(y <= 0 || y >= canvasSizeY)
+		if(y <= 0 || y + height >= canvasSizeY)
 		{
 			ChangeDirectionY();
 		}

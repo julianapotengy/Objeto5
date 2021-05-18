@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Quadtree {
 	
-	int maxQnt = 10;
+	int maxQnt = 20;
 	Square square;
 	ArrayList<Square> squares = new ArrayList<Square>();
 	ArrayList<Quadtree> quadtrees = new ArrayList<Quadtree>();
@@ -14,6 +14,9 @@ public class Quadtree {
 	ArrayList<Particle> tempParticles = new ArrayList<Particle>();
 	
 	boolean isDivided = false;
+	
+	long startTime;
+	long elapsedTime;
 	
 	public Quadtree(Square square)
 	{
@@ -43,7 +46,7 @@ public class Quadtree {
 			{
 				if(quadtrees.get(i).square.ContainsParticle(allParticles.get(j)))
 				{
-					squares.get(i).particles.add(allParticles.get(j));
+					quadtrees.get(i).square.particles.add(allParticles.get(j));
 				}
 			}
 			quadtrees.get(i).Insert(quadtrees.get(i).square.particles);
@@ -57,7 +60,6 @@ public class Quadtree {
 		if(particles.size() <= maxQnt)
 		{
 			actualParticles = particles;
-			CheckParticlesCollision();
 		}
 		else
 		{
@@ -71,7 +73,7 @@ public class Quadtree {
 	
 	public void Change() 
 	{
-		squares = new ArrayList <Square>();
+		squares = new ArrayList<Square>();
 		quadtrees = new ArrayList<Quadtree>();
 		actualParticles = new ArrayList<Particle>();
 		tempParticles = new ArrayList<Particle>();
@@ -79,7 +81,7 @@ public class Quadtree {
 	
 	public void CheckQntInTimer() 
 	{
-		if (isDivided) 
+		if(isDivided) 
 		{
 			for(int i = 0; i < quadtrees.size(); i++)
 			{
@@ -92,52 +94,18 @@ public class Quadtree {
 					tempParticles.add(allParticles.get(i));
 				}
 			}
-			if (tempParticles != actualParticles) 
+			if(tempParticles != actualParticles) 
 			{
 				Change();
 				isDivided = false;
 				Insert(allParticles);
 			}
 		}
-	}
-	
-	public void CheckParticlesCollision() 
-	{
-		long startTime = System.currentTimeMillis();
-		
-		for(int i = 0; i < actualParticles.size(); i++)
-		{
-			Particle particleA = actualParticles.get(i);
-			
-			for(int j = i + 1; j < actualParticles.size(); j++)
-			{
-				Particle particleB = actualParticles.get(j);
-				if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
-						&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
-				{
-					particleA.ChangeColor();
-					particleB.ChangeColor();
-					
-					if (particleA.velocityX != particleB.velocityX) 
-					{
-						particleA.ChangeDirectionX();
-						particleB.ChangeDirectionX();
-					}
-					if (particleA.velocityY != particleB.velocityY) 
-					{
-						particleA.ChangeDirectionY();
-						particleB.ChangeDirectionY();
-					}
-				}
-			}
-		}
-		
-		long elapsedTime = System.currentTimeMillis() - startTime;
-		System.out.println(elapsedTime);
+		CheckParticlesCollision();
 	}
 	
 	public void Paint(Graphics g)
-	{
+	{		
 		for(int i = 0; i < squares.size(); i++)
 		{
 			squares.get(i).Paint(g);
@@ -147,6 +115,39 @@ public class Quadtree {
 			for(int i = 0; i < quadtrees.size(); i++)
 			{
 				quadtrees.get(i).Paint(g);
+			}
+		}
+	}
+	
+	public void CheckParticlesCollision() 
+	{
+		if (actualParticles.size() > 1) 
+		{
+			for(int i = 0; i < actualParticles.size(); i++)
+			{
+				Particle particleA = actualParticles.get(i);
+				
+				for(int j = i + 1; j < actualParticles.size(); j++)
+				{
+					Particle particleB = actualParticles.get(j);
+					if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
+							&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
+					{
+						particleA.ChangeColor();
+						particleB.ChangeColor();
+						
+						if (particleA.velocityX != particleB.velocityX) 
+						{
+							particleA.ChangeDirectionX();
+							particleB.ChangeDirectionX();
+						}
+						if (particleA.velocityY != particleB.velocityY) 
+						{
+							particleA.ChangeDirectionY();
+							particleB.ChangeDirectionY();
+						}
+					}
+				}
 			}
 		}
 	}

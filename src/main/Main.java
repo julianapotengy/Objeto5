@@ -15,9 +15,9 @@ public class Main extends JFrame implements ActionListener {
 	private int canvasSizeX = canvasSize - 24;
 	private int canvasSizeY = canvasSize - 44;
 	
-	private int maxParticles = 10000;
+	private int maxParticles = 1000;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
-	private int particleSize = 5;
+	private int particleSize = 2;
 	
 	Random generator = new Random();
 	
@@ -27,6 +27,9 @@ public class Main extends JFrame implements ActionListener {
 	Quadtree initialQuadtree = new Quadtree(initialSquare);
 	
 	boolean quadtree = true;
+	
+	long startTime;
+	long elapsedTime;
 	
 	public static void main(String[] args) {
 		Main m = new Main();
@@ -60,20 +63,22 @@ public class Main extends JFrame implements ActionListener {
 		for(int i = 0; i < maxParticles; i++)
 		{
 			allParticles.get(i).Move();
-			if (allParticles.get(i).collided) 
+			if(allParticles.get(i).collided) 
 			{
 				allParticles.get(i).timerChangeColor++;
 			}
-			if (allParticles.get(i).timerChangeColor >= 4) 
+			if(allParticles.get(i).timerChangeColor >= 4) 
 			{
 				allParticles.get(i).timerChangeColor = 0;
 				allParticles.get(i).collided = false;
 			}
 		}
-		if (quadtree) 
+		
+		if(quadtree) 
 		{
 			initialQuadtree.CheckQntInTimer();
-		}else 
+		}
+		else 
 		{
 			CheckParticlesCollision();
 		}
@@ -83,7 +88,7 @@ public class Main extends JFrame implements ActionListener {
 	
 	private void CheckParticlesCollision()
 	{
-		long startTime = System.currentTimeMillis();
+		//long startTime = System.currentTimeMillis();
 		
 		for(int i = 0; i < maxParticles; i++)
 		{
@@ -111,9 +116,8 @@ public class Main extends JFrame implements ActionListener {
 				}
 			}
 		}
-		
-		long elapsedTime = System.currentTimeMillis() - startTime;
-		System.out.println(elapsedTime);
+		//long elapsedTime = System.currentTimeMillis() - startTime;
+		//System.out.println(elapsedTime);
 	}
 	
 	private class MyCanvas extends Canvas {
@@ -121,6 +125,14 @@ public class Main extends JFrame implements ActionListener {
 		@Override
 		public void paint(Graphics g)
 		{
+			if (startTime != 0) 
+			{
+				elapsedTime = System.currentTimeMillis() - startTime;
+				System.out.println(elapsedTime);
+			}
+			
+			startTime = System.currentTimeMillis();
+			
 			for(int i = 0; i < maxParticles; i++)
 			{
 				allParticles.get(i).Paint(g);
