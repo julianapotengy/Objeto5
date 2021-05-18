@@ -15,7 +15,7 @@ public class Main extends JFrame implements ActionListener {
 	private int canvasSizeX = canvasSize - 25;
 	private int canvasSizeY = canvasSize - 45;
 	
-	private int maxParticles = 300;
+	private int maxParticles = 50;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
 	private int particleSize = 10;
 	
@@ -55,35 +55,35 @@ public class Main extends JFrame implements ActionListener {
 		for(int i = 0; i < maxParticles; i++)
 		{
 			allParticles.get(i).Move();
-			CheckParticlesCollision(i);
 		}
+		CheckParticlesCollision();
 		canvas.repaint();
 	}
 	
-	private void CheckParticlesCollision(int id1)
+	private void CheckParticlesCollision()
 	{
-		Particle particleA = allParticles.get(id1);
 		
 		for(int i = 0; i < maxParticles; i++)
 		{
-			if(id1 != i)
+			Particle particleA = allParticles.get(i);
+			
+			for(int j = i + 1; j < maxParticles; j++)
 			{
-				Particle particleB = allParticles.get(i);
+				Particle particleB = allParticles.get(j);
 				if(particleB.x < (particleA.x + particleA.width) && particleA.x < (particleB.x + particleB.width) 
 						&& particleB.y < (particleA.y + particleA.height) && particleA.y < (particleB.y + particleB.height))
 				{
+					particleA.ChangeColor();
+					particleB.ChangeColor();
+					
 					if (particleA.velocityX != particleB.velocityX) 
 					{
-						particleA.ChangeColor();
 						particleA.ChangeDirectionX();
-						particleB.ChangeColor();
 						particleB.ChangeDirectionX();
 					}
 					if (particleA.velocityY != particleB.velocityY) 
 					{
-						particleA.ChangeColor();
 						particleA.ChangeDirectionY();
-						particleB.ChangeColor();
 						particleB.ChangeDirectionY();
 					}
 				}
