@@ -10,7 +10,7 @@ public class Particle extends Canvas {
 	
 	int id, x, y, width, height, canvasSizeX, canvasSizeY;
 	float velocityX, velocityY;
-	boolean colorBlack = true;
+	boolean collided = false;
 	int timerChangeColor = 0;
 	
 	public Particle(int id, int x, int y, int width, int height, int canvasSizeX, int canvasSizeY)
@@ -48,7 +48,7 @@ public class Particle extends Canvas {
 	
 	public Color GetColor()
 	{
-		if(colorBlack)
+		if(!collided)
 		{
 			return Color.black;
 		}
@@ -57,9 +57,17 @@ public class Particle extends Canvas {
 	
 	public void ChangeColor()
 	{
-		if(colorBlack != true)
-			colorBlack = true;
-		else colorBlack = false;
+		if(!collided) 
+		{
+			collided = true;
+		}else 
+		{
+			if (timerChangeColor > 0) 
+			{
+				timerChangeColor = 0;
+				collided = false;
+			}
+		}
 	}
 	
 	public void CheckCollisionWalls()

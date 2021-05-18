@@ -15,7 +15,7 @@ public class Main extends JFrame implements ActionListener {
 	private int canvasSizeX = canvasSize - 24;
 	private int canvasSizeY = canvasSize - 44;
 	
-	private int maxParticles = 50;
+	private int maxParticles = 100;
 	private ArrayList<Particle> allParticles = new ArrayList<Particle>(maxParticles);
 	private int particleSize = 10;
 	
@@ -60,6 +60,15 @@ public class Main extends JFrame implements ActionListener {
 		for(int i = 0; i < maxParticles; i++)
 		{
 			allParticles.get(i).Move();
+			if (allParticles.get(i).collided) 
+			{
+				allParticles.get(i).timerChangeColor++;
+			}
+			if (allParticles.get(i).timerChangeColor >= 4) 
+			{
+				allParticles.get(i).timerChangeColor = 0;
+				allParticles.get(i).collided = false;
+			}
 		}
 		if (quadtree) 
 		{
